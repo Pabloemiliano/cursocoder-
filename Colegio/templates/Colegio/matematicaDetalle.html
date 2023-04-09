@@ -1,0 +1,45 @@
+{% extends 'Colegio/home.html' %}
+
+{% block content %}
+
+
+<br>
+<br><br>
+<br>
+
+<div class="container">
+
+<p><h4>{{matematica.titulo}}</h4></p>
+
+{% if matematica.imagenInstrumento %}
+    <p><img src="{{matematica.imagenInstrumento.url}}" alt=""></p>
+{% endif %}
+
+<p>Descripción: {{matematica.descripcion}}</p>
+<p>Teléfono de Contacto: {{matematica.telefonoContacto}}</p>
+<p>Email de Contacto: {{matematica.emailContacto}}</p>
+
+</div>
+<br>
+<div class="container">
+    <h4>Comentarios...</h4>
+    <br>
+    <div class="container">
+    {% if not matematica.comentarios.all %}
+        No han comentado este problema
+    {% else %}
+        {% for comentario in matematica.comentarios.all %}
+        <p><strong>{{comentario.nombre}}</strong></p>
+        <p>{{comentario.mensaje}}</p>
+        <p><small>{{comentario.fechaComentario}}</small></p>
+        <hr>
+        {% endfor %}
+    {% endif %}
+    <a href="{% url 'comentario' matematica.pk %}">Agrega un Comentario</a>
+    </div>
+</div>
+<br>
+<br>
+<br><br>
+<br>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'Colegio/home.html' %}
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+
+
+<p><h4>{{fisica.titulo}}</h4></p>
+{% if fisica.imagenInstrumento %}
+    <p><img src="{{fisica.imagenInstrumento.url}}" alt=""></p>
+{% endif %}
+
+<p>Descripción: {{fisica.descripcion}}</p>
+<p>Teléfono de Contacto: {{fisica.telefonoContacto}}</p>
+<p>Email de Contacto: {{fisica.emailContacto}}</p>
+
+</div>
+<br>
+<div class="container">
+    <h4>Comentarios...</h4>
+    <br>
+    <div class="container">
+    {% if not fisica.comentarios.all %}
+        No posee comentario
+    {% else %}
+        {% for comentario in fisica.comentarios.all %}
+        <p><strong>{{comentario.nombre}}</strong></p>
+        <p>{{comentario.mensaje}}</p>
+        <p><small>{{comentario.fechaComentario}}</small></p>
+        <hr>
+        {% endfor %}
+    {% endif %}
+    <a href="{% url 'comentario' fisica.pk %}">Agrega un Comentario</a>
+    </div>
+</div>
+<br>
+{% endblock %}
+
+
+

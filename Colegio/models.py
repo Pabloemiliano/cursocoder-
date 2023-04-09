@@ -1,35 +1,39 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
-class Curso(models.Model):
+class Problema(models.Model):
+    materiaSeleccion = (
+    ('matematica','Matematica'),
+    ('fisica','Fisica'),
+    )
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    titulo = models.CharField(max_length=200)
+    materia = models.CharField(max_length=15, choices=materiaSeleccion, default='matematica')
+    marca = models.CharField(max_length=40)
+    modelo = models.CharField(max_length=40)
+    descripcion = models.TextField(null=True, blank=True)
+    year = models.CharField(max_length=4) 
+    precio = models.CharField(max_length=5)
+    fechaPublicacion = models.DateTimeField(auto_now_add=True)
+    telefonoContacto = models.IntegerField()
+    emailContacto = models.EmailField()
+    imagenInstrumento = models.ImageField(null=True, blank=True, upload_to="imagenes/")
 
-    nombre = models.CharField(max_length=30)
-    camada = models.IntegerField()
 
-    def __str__(self) -> str:
-        return f"{self.id} - {self.nombre} - {self.camada}"
-class Estudiante(models.Model):
+    class Meta:
+        ordering = ['usuario', '-fechaPublicacion']
 
-    nombre = models.CharField(max_length=30)
-    apellido = models.CharField(max_length=30)
-    email = models.EmailField(max_length=30)
+    def __str__(self):
+        return self.titulo
 
-    def __str__(self) -> str:
-        return f"{self.id} - {self.nombre}  {self.apellido}"
-class Profesor(models.Model):
-    nombre = models.CharField(max_length=30)
-    apellido = models.CharField(max_length=30)
-    email = models.EmailField(max_length=30)
-    materia = models.CharField(max_length=30)
+class Comentario(models.Model):
+    comentario = models.ForeignKey(Problema, related_name='comentarios', on_delete=models.CASCADE, null=True)
+    nombre = models.CharField(max_length=40)
+    mensaje = models.TextField(null=True, blank=True)
+    fechaComentario = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self) -> str:
-        return f"{self.id} - {self.nombre}  {self.apellido} - {self.materia}"
-class Examen(models.Model):
+    class Meta:
+        ordering = ['-fechaComentario']
 
-    materia = models.CharField(max_length=50)
-    fecha = models.DateField()
-    nota = models.IntegerField()
-
-    def __str__(self) -> str:
-        return f"{self.id} - {self.materia} - {self.fecha} - {self.nota}"
-
+    def __str__(self):
+        return '%s - %s' % (self.nombre, self.comentario)
